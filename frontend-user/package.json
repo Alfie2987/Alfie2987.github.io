@@ -1,0 +1,14 @@
+{
+  "name": "frontend-user",
+  "version": "1.0.0",
+  "description": "This repository houses an example blog website where visitors can read and comment on blog posts.",
+  "main": "index.js",
+  "private": "true",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Dexter Crago",
+  "license": "ISC",
+  "type": "module"
+}
