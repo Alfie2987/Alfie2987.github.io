@@ -2,6 +2,91 @@
 layout: base
 ---
 
+<style>
+        .container {
+            width: 485px;
+            height: 480px;
+            display: flex; 
+             /*换行  */
+            flex-wrap: wrap;
+            /* flex容器在交叉轴上有多行, 该属性生效, 默认值为stretch, 
+            导致flex容器将交叉轴上的多余空间按行数平均分给每行, 所以修改为 flex-start */
+            align-content: flex-start;
+            /* 滚动 */
+            overflow-y: scroll;
+        }
+
+        /* 图片 */
+        .picture {
+            width: 140px;
+            height: 140px;
+            margin: 10px;
+            /* 图片无法选中 */
+            user-select: none;
+        }
+
+        /* 上传框 */
+        .upload-dragger {
+            width: 140px;
+            height: 140px;
+            margin: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border: 3px dashed aqua;
+            border-radius: 10px;
+            box-sizing: border-box;
+            /* 游标 */
+            cursor: pointer;
+        }
+        .upload-text {
+            color: aqua;
+            font-size: 13px;
+            /* 文字无法选中 */
+            user-select: none;
+        }
+        .upload-icon path {
+            fill: aqua;
+        }
+
+        /* 隐藏文件选择按钮 */
+        #upload-input {
+            display: none;
+        }
+
+        /* 鼠标移入上传框 */
+        .upload-dragger:hover {
+            border: 3px dashed orange;
+        }
+        /* 拖拽时的样式 */
+        .upload-dragger.drag {
+            border: 3px dashed orange;
+        }
+        .upload-dragger.drag .upload-text{
+            color: orange;
+        }
+        .upload-dragger.drag .upload-icon path{
+            fill: orange;
+        }
+
+        /* 拖拽时子元素禁用指针事件 (因为子元素会继承父元素的拖拽响应) */
+        .upload-dragger.drag * {
+            pointer-events: none;
+        }
+
+        /* 滚动条样式 */
+        .container::-webkit-scrollbar {
+            width: 5px;
+            background-color: transparent;
+        }
+        /* 滑块 */
+        .container::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background-color: rgb(196, 196, 196);
+        }
+</style>
+
 <div class="container">
     <!-- <img src="./1.gif" alt="" class="picture"><img src="./1.gif" alt="" class="picture"><img src="./1.gif" alt="" class="picture"> -->
     <div class="upload-dragger">
