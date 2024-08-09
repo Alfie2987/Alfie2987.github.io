@@ -2,90 +2,131 @@
 layout: base
 ---
 
-    <div class="drag-upload">
-        <div
-            class="upload-area"
-            @dragover.prevent="handleDragOver"
-            @dragleave="handleDragLeave"
-            @drop.prevent="handleDrop"
-            @click="handleUploadClick"
-        >
-            <p v-if="!isDragging" class="tip-text">{{ tipText }}</p>
-            <p v-else>{{ tipConfirmText }}</p>
-        </div>
-        <input
-            type="file"
-            ref="fileInput"
-            style="display: none"
-            @change="handleFileSelected"
-        />
-    </div>
-
-<script>
-export default {
-    name: "JDragUpload",
-    props: {
-        tipText: {
-            type: String,
-            default: "将文件拖放到此处或点击上传",
-        },
-        tipConfirmText: {
-            type: String,
-            default: "释放文件以上传",
-        },
-    },
-    data() {
-        return {
-            isDragging: false,
-        };
-    },
-    methods: {
-        handleDragOver(event) {
-            event.preventDefault();
-            this.isDragging = true;
-        },
-        handleDragLeave() {
-            this.isDragging = false;
-        },
-        handleDrop(event) {
-            event.preventDefault();
-            this.isDragging = false;
-            const file = event.dataTransfer.files[0];
-            this.uploadFile(file);
-        },
-        handleUploadClick() {
-            this.$refs.fileInput.click();
-        },
-        handleFileSelected() {
-            const file = this.$refs.fileInput.files[0];
-            this.uploadFile(file);
-        },
-        uploadFile(file) {
-            this.$emit("uploadFile", file);
-        },
-    },
-};
-</script>
-
-<style lang="less" scoped>
-.drag-upload {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    border: 2px dashed #ccc;
-    .upload-area {
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+        padding: 0;
+        margin: 0;
+        height: 100vh;
         display: flex;
-        align-items: center;
         justify-content: center;
-        height: 100%;
-        width: 100%;
-        background-color: #f0f0f0;
+        align-items: center;
+    }
+    #drop-area {
+        border: 2px dashed #ccc;
+        border-radius: 10px;
+        width: 480px;
+        font-family: sans-serif;
+        margin: 100px auto;
+        padding: 20px;
+    }
+    #drop-area.highlight {
+        border-color: #409eff;
+    }
+    p {
+        margin-top: 0;
+    }
+    #file {
+        display: none;
+    }
+    .button {
+        display: block;
+        padding: 10px;
+        background: #409eff;
         cursor: pointer;
-        .tip-text {
-            text-align: center;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        color: #fff;
+        width: fit-content;
+    }
+    #show-area img {
+        width: 150px;
+        margin-top: 10px;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="drop-area">
+    <p>将文件拖到此处或点击上载</p>
+    <input id="file" type="file" multiple accept="image/*" onchange="handleFiles(this.files)">
+    <label class="button" for="file">点击上载</label>
+    <progress id="progress" max=100 value=0></progress>
+    <div id="show-area" />
+  </div>
+
+  <script>
+    const dropArea = document.getElementById('drop-area');
+    ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false)
+        document.body.addEventListener(eventName, preventDefaults, false)
+    })
+    ;['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false)
+    })
+
+    ;['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false)
+    })
+    dropArea.addEventListener('drop', (e) => {
+        let files = e.dataTransfer.files
+        handleFiles(files);
+    }, false)
+    function preventDefaults(e) {
+        e.preventDefault()
+        e.stopPropagation()
+    }
+    function highlight(e) {
+        dropArea.classList.add('highlight')
+    }
+    function unhighlight(e) {
+        dropArea.classList.remove('highlight')
+    }
+    let uploadProgress = []
+    let progressBar = document.getElementById('progress')
+    function initializeProgress(numFiles) {
+        progressBar.value = 0
+        uploadProgress = []
+        for (let i = numFiles; i > 0; i--) {
+            uploadProgress.push(0)
         }
     }
-}
-</style>
+    function updateProgress(fileNumber, percent) {
+        uploadProgress[fileNumber] = percent
+        let total = uploadProgress.reduce((tot, curr) => tot + curr, 0) / uploadProgress.length
+        progressBar.value = total
+    }
+    function handleFiles(files) {
+        files = [...files]
+        initializeProgress(files.length)
+        files.forEach(uploadFile)
+        files.forEach(previewFile)
+    }
+    function previewFile(file) {
+        let reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onloadend = function () {
+            let img = document.createElement('img')
+            img.src = reader.result
+            document.getElementById('show-area').appendChild(img)
+        }
+    }
+    function uploadFile(file, i) {
+        setTimeout(() => {
+            updateProgress(i, 20 || 100)
+        }, 500)
+        setTimeout(() => {
+            updateProgress(i, 50 || 100)
+        }, 800)
+        setTimeout(() => {
+            updateProgress(i, 80 || 100)
+        }, 1000)
+        setTimeout(() => {
+            updateProgress(i, 100)
+        }, 1500)
+    }
+  </script>
+</body>
