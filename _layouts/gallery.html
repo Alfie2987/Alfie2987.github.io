@@ -41,18 +41,6 @@ layout: base
     }
     let uploadProgress = []
     let progressBar = document.getElementById('progress')
-    function initializeProgress(numFiles) {
-        progressBar.value = 0
-        uploadProgress = []
-        for (let i = numFiles; i > 0; i--) {
-            uploadProgress.push(0)
-        }
-    }
-    function updateProgress(fileNumber, percent) {
-        uploadProgress[fileNumber] = percent
-        let total = uploadProgress.reduce((tot, curr) => tot + curr, 0) / uploadProgress.length
-        progressBar.value = total
-    }
     function handleFiles(files) {
         files = [...files]
         initializeProgress(files.length)
@@ -67,20 +55,6 @@ layout: base
             img.src = reader.result
             document.getElementById('show-area').appendChild(img)
         }
-    }
-    function uploadFile(file, i) {
-        setTimeout(() => {
-            updateProgress(i, 20 || 100)
-        }, 500)
-        setTimeout(() => {
-            updateProgress(i, 50 || 100)
-        }, 800)
-        setTimeout(() => {
-            updateProgress(i, 80 || 100)
-        }, 1000)
-        setTimeout(() => {
-            updateProgress(i, 100)
-        }, 1500)
     }
   </script>
 </body>
