@@ -2,22 +2,92 @@
 layout: base
 ---
 
-<div class="dnd-file-uploader">
-    <div class="drop-area">
-      <ion-icon class="upload-icon" name="cloud-upload"></ion-icon>
-      <p class="tip">Drag&Drop files here</p>
-    </div>
-    <div class="task-list"></div>
-</div>
-
-<template id="template-task">
-    <div class="task">
-      <a class="task-name" target="_blank">some file name</a>
-      <span class="task-progress">50%</span>
+<template>
+    <div class="drag-upload">
+        <div
+            class="upload-area"
+            @dragover.prevent="handleDragOver"
+            @dragleave="handleDragLeave"
+            @drop.prevent="handleDrop"
+            @click="handleUploadClick"
+        >
+            <p v-if="!isDragging" class="tip-text">{{ tipText }}</p>
+            <p v-else>{{ tipConfirmText }}</p>
+        </div>
+        <input
+            type="file"
+            ref="fileInput"
+            style="display: none"
+            @change="handleFileSelected"
+        />
     </div>
 </template>
 
-<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-<script src="./FileUploader.js"></script>
-<script src="./script.js"></script>
+<script>
+export default {
+    name: "JDragUpload",
+    props: {
+        tipText: {
+            type: String,
+            default: "将文件拖放到此处或点击上传",
+        },
+        tipConfirmText: {
+            type: String,
+            default: "释放文件以上传",
+        },
+    },
+    data() {
+        return {
+            isDragging: false,
+        };
+    },
+    methods: {
+        handleDragOver(event) {
+            event.preventDefault();
+            this.isDragging = true;
+        },
+        handleDragLeave() {
+            this.isDragging = false;
+        },
+        handleDrop(event) {
+            event.preventDefault();
+            this.isDragging = false;
+            const file = event.dataTransfer.files[0];
+            this.uploadFile(file);
+        },
+        handleUploadClick() {
+            this.$refs.fileInput.click();
+        },
+        handleFileSelected() {
+            const file = this.$refs.fileInput.files[0];
+            this.uploadFile(file);
+        },
+        uploadFile(file) {
+            this.$emit("uploadFile", file);
+        },
+    },
+};
+</script>
+
+<style lang="less" scoped>
+.drag-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    border: 2px dashed #ccc;
+    .upload-area {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        background-color: #f0f0f0;
+        cursor: pointer;
+        .tip-text {
+            text-align: center;
+        }
+    }
+}
+</style>
