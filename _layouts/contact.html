@@ -47,33 +47,32 @@ layout: base
   </span>
 </div>
 
-<form id="form" class="form black-80" action="https://formcarry.com/" method="POST">
-  <div class="form__subcontainer">
-    <div>
-      <label class="db fw4 lh-copy f6" for="form-first-name">First Name</label>
-      <input type="text" name="first-name" id="form-first-name" required="">
-    </div>
-    <div>
-      <label class="db fw4 lh-copy f6" for="form-last-name">Last Name</label>
-      <input type="text" name="last-name" id="form-last-name" required="">
-    </div>
-  </div>
-
-  <div>
-    <label class="db fw4 lh-copy f6" for="form-email">E-Mail</label>
-    <input type="email" name="email" id="form-email" required="">
-  </div>
-
-  <div>
-    <label class="db fw4 lh-copy f6" for="form-message">Message</label>
-    <textarea name="message" id="form-message" class="db border-box hover-black w-100 measure ba b--black-20 pa2 br2 mb2" rows="3"></textarea>
-  </div>
-
-  <div class="form__submit">
-    <div class="form__btn">
-      <input class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="submit" value="Send">
-    </div>
-  </div>
-
-  <p class="form__message"></p>
-</form>
+<div class="contact-form">
+          <h2>Contact Form</h2>
+          <form class="row" id="contact-form" action="https://fabform.io/f/9AJk8ro" method="POST">
+            <div class="col-md-6">
+              <input type="text" class="form-control" id="name" name="name" placeholder="Your Name">
+            </div>
+            <div class="col-md-6">
+              <input type="email" class="form-control" id="mail" name="email" required="" placeholder="Your Email">
+            </div>
+            <div class="col-md-12">
+              <textarea class="form-control" id="message" rows="8" name="message" placeholder="Message here…"></textarea>
+            </div>
+            <div class="col-md-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="agree" name="terms-agree">
+                <label class="form-check-label" for="agree">
+                  I agree that my submitted data is being collected and stored.
+                </label>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <button type="submit" class="btn btn-primary" id="contact-form-button" formtarget="_blank">Send Message</button>
+              <p id="contact-form-status"></p>
+            </div>
+          </form>
+          <p class="contact-form-generator">
+            <strong>** </strong> <a href="https://fabform.io/" target="_blank">Static website forms</a>
+          </p>
+        </div>
