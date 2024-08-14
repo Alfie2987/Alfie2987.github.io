@@ -1,6 +1,6 @@
 ---
 title: LAB
-layout: index
+layout: home
 ---
 
 I always pursue the frontier of technology. As LLMs continues to develop, I’ve started to explore the potential of customized chatbots and AI generative images.
